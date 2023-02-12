@@ -1,14 +1,25 @@
+import React, { useState } from "react";
 import styled from "styled-components";
 import { TbAdjustmentsHorizontal } from "react-icons/tb";
+import SelectCountry from "./SelectCountry";
 
 const Nav = () => {
+  const [modal, setModal] = useState(false);
+  const handleSelect = () => {
+    setModal(true);
+    console.log(modal);
+  };
+
   return (
     <StyledNav>
       <div className="navWrap">
         <div className="navTitle">코로나 현황판</div>
-        <div className="navListIcon">
+        <div className="navListIcon" onClick={handleSelect}>
           <TbAdjustmentsHorizontal />
         </div>
+        {modal && (
+          <SelectCountry modal={modal} setModal={setModal}></SelectCountry>
+        )}
       </div>
     </StyledNav>
   );

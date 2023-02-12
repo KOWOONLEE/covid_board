@@ -47,7 +47,7 @@ const BoardDetail = () => {
         </div>
       </div>
       {chartList.map((list) => (
-        <div key="title" className="chartWrap">
+        <div key={list} className="chartWrap">
           <div className="totalStates">
             <div className="statesTitle">
               <span>{list}</span>
@@ -85,6 +85,12 @@ const StyledBoard = styled.div`
     justify-content: center;
     margin: 5vw;
   }
+  .leftWrap {
+    width: 45vw;
+  }
+  .rightWrap {
+    width: 45vw;
+  }
   .chartWrap {
     display: flex;
     width: 90vw;
@@ -102,14 +108,14 @@ const StyledBoard = styled.div`
   }
   .statesTitle {
     height: 20%;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: 600;
   }
   .peopleCount {
     display: flex;
     height: 60%;
     font-size: 2em;
-    color: #109ddc;
+    color: #3087c1;
     align-items: center;
     justify-content: center;
   }
