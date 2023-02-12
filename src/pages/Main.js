@@ -1,4 +1,10 @@
+import BoardDetail from "../components/BoardDetail";
+
 const Main = () => {
-  return <>안녕하세요</>;
+  return (
+    <>
+      <BoardDetail />
+    </>
+  );
 };
 export default Main;

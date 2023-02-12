@@ -14,8 +14,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background: pink;
-    padding-top: 10vh;
+    background: white;
     font-family: 'Noto Sans KR', sans-serif;
   }
 `;
