@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { TbAdjustmentsHorizontal } from "react-icons/tb";
 import SelectCountry from "./SelectCountry";
 
-const Nav = () => {
+const Nav = ({ selectedCountry, setSelectedCountry }) => {
   const [modal, setModal] = useState(false);
   const handleSelect = () => {
     setModal(true);
@@ -18,7 +18,12 @@ const Nav = () => {
           <TbAdjustmentsHorizontal />
         </div>
         {modal && (
-          <SelectCountry modal={modal} setModal={setModal}></SelectCountry>
+          <SelectCountry
+            modal={modal}
+            setModal={setModal}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+          ></SelectCountry>
         )}
       </div>
     </StyledNav>

@@ -8,8 +8,10 @@ const SelectCountry = ({ modal, setModal }) => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [value, setValue] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
   const [countryList, setCountryList] = useState([]);
   const inputRef = useRef("");
+  const clickRef = useRef("");
   const debounce = useRef();
   const exitModal = () => {
     setModal(false);
@@ -22,26 +24,6 @@ const SelectCountry = ({ modal, setModal }) => {
     };
   }, []);
 
-  const getCountriesData = () => {
-    axios
-      .get("https://api.covid19api.com/countries")
-      .then((result) => {
-        setCountryList(result.data);
-        // const copy = [...cosmetic, ...result.data];
-        // setCosmetic(copy);
-        // setCount(count + 1);
-
-        //로딩중 숨기기
-      })
-      .catch(() => {
-        // if (count >= 4) {
-        //   alert("상품이 더이상 없습니다.");
-        // }
-        // console.log("통신 실패");
-        //로딩중 숨기기 (실패해도 로딩중 숨겨야함)
-      });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -53,7 +35,6 @@ const SelectCountry = ({ modal, setModal }) => {
   };
 
   useEffect(() => {
-    // getCountriesData();
     clearTimeout(debounce.current);
 
     const countryLoading = async () => {
@@ -74,11 +55,19 @@ const SelectCountry = ({ modal, setModal }) => {
     debounce.current = setTimeout(countryLoading, 500);
   }, [search]);
 
+  const clickCountry = (e) => {
+    setSelectedCountry(e.target.value);
+    console.log(selectedCountry);
+  };
+
   return (
     <StyledModal>
       <div className="modalWrap">
         <div className="exitbuttonWrap">
           <GoX onClick={exitModal} />
+        </div>
+        <div>
+          <span>지역 선택하기</span>
         </div>
         <div>
           <span>전세계 현황 조회하기</span>
@@ -88,14 +77,15 @@ const SelectCountry = ({ modal, setModal }) => {
             <span>선택 국가 현황 조회하기</span>
           </div>
           <div>
-            <form>
+            <form className="countriesForm">
               <input
-                placeholder="국가명을 검색해주세요"
+                className="countriesInput"
+                placeholder="대소문자 구분하여 정확하게 입력"
                 type="text"
                 ref={inputRef}
                 onChange={(e) => setSearch(e.target.value)}
               ></input>
-              <button onSubmit={handleSubmit}>조회</button>
+              <button onClick={handleSubmit}>조회</button>
             </form>
           </div>
           <div>
@@ -105,14 +95,16 @@ const SelectCountry = ({ modal, setModal }) => {
                   if (value === "") {
                     return val;
                   }
-                  if (val.Country.toLowerCase().includes(value.toLowerCase())) {
+                  if (val.Country.toUpperCase().includes(value.toUpperCase())) {
                     return val;
                   }
                 })
                 .map((contries) => (
-                  <li>
-                    <p>{contries.Country}</p>
-                  </li>
+                  <ul key={contries.Country} className="countriesList">
+                    <li id={contries.Country} onClick={clickCountry}>
+                      {contries.Country}
+                    </li>
+                  </ul>
                 ))}
           </div>
         </div>
@@ -153,6 +145,18 @@ const StyledModal = styled.div`
       background-color: grey;
       border: 2px solid black;
       fill: white;
+    }
+    .countriesForm {
+      width: 100%;
+    }
+    .countriesInput {
+      width: 80%;
+    }
+    .countriesList {
+      list-style: none;
+    }
+    .countriesList li::before {
+      content: "👉";
     }
   }
 `;
