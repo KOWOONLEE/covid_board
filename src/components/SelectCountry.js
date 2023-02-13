@@ -9,7 +9,7 @@ const SelectCountry = ({ modal, setModal }) => {
   const [search, setSearch] = useState("");
   const [value, setValue] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [countryList, setCountryList] = useState([]);
+  const [countryList, setCountryList] = useState("");
   const inputRef = useRef("");
   const clickRef = useRef("");
   const debounce = useRef();
@@ -24,6 +24,25 @@ const SelectCountry = ({ modal, setModal }) => {
     };
   }, []);
 
+  useEffect(() => {
+    clearTimeout(debounce.current);
+
+    const countryLoading = async () => {
+      try {
+        const { data } = await axios.get("https://api.covid19api.com/summary");
+        // const fillterData = data.filter((country) =>
+        //   country.Countries.includes(search)
+        // );
+        setCountryList(data);
+        console.log(countryList.Countries);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    debounce.current = setTimeout(countryLoading, 500);
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -34,31 +53,6 @@ const SelectCountry = ({ modal, setModal }) => {
     }
   };
 
-  useEffect(() => {
-    clearTimeout(debounce.current);
-
-    // const countryLoading = async () => {
-    //   setLoading(true);
-    //   try {
-    //     const { data } = await axios.get("https://api.covid19api.com/summary");
-    //     console.log(data.Global);
-    //     const fillterData = data.filter((country) =>
-    //       country.Countries.Country.includes(search)
-    //     );
-    //     setCountryList(fillterData);
-    //     setLoading(false);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-    // const countryLoading = () => {
-    //   axios.get("https://api.covid19api.com/summary").then((result) => {
-    //     console.log(result.Countries);
-    //   });
-    // };
-    // debounce.current = setTimeout(countryLoading, 500);
-  }, [search]);
-
   const clickCountry = (e) => {
     setSelectedCountry(e.target.value);
     console.log(selectedCountry);
@@ -67,7 +61,7 @@ const SelectCountry = ({ modal, setModal }) => {
   const clickGlobal = async () => {
     try {
       const { data } = await axios.get("https://api.covid19api.com/summary");
-      console.log(data.Global);
+      console.log(data.Countries);
       setModal(false);
     } catch (error) {
       console.log(error);
@@ -103,28 +97,20 @@ const SelectCountry = ({ modal, setModal }) => {
             </form>
           </div>
           <div>
-            {!loading &&
-              countryList
-                .filter((val) => {
-                  if (value === "") {
-                    return val;
-                  }
-                  if (
-                    val.Countries.Country.toUpperCase().includes(
-                      value.toUpperCase()
-                    )
-                  ) {
-                    return val;
-                  }
-                })
-                .map((contries) => (
-                  <ul
-                    key={contries.Countries.Country}
-                    className="countriesList"
-                  >
-                    <li onClick={clickCountry}>{contries.Countries.Country}</li>
-                  </ul>
-                ))}
+            {countryList.Countries
+              // .filter((val) => {
+              //   if (value === "") {
+              //     return val;
+              //   }
+              //   if (val.Countries.toUpperCase().includes(value.toUpperCase())) {
+              //     return val;
+              //   }
+              // })
+              .map((contries) => (
+                <ul key={contries.Countries} className="countriesList">
+                  <li onClick={clickCountry}>{contries.Countries}</li>
+                </ul>
+              ))}
           </div>
         </div>
       </div>

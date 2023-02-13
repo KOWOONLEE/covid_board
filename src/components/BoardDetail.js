@@ -1,15 +1,18 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const BoardDetail = () => {
   const chartList = ["확진자 추이 비교", "사망자 추이", "회복자 추이"];
   const [globalState, setGlobalState] = useState("");
+  const navigator = useNavigate();
 
   useEffect(() => {
     const globalLoading = async () => {
       try {
         const { data } = await axios.get("https://api.covid19api.com/summary");
+        console.log(data);
         setGlobalState(data);
       } catch (error) {
         console.log(error);
@@ -18,6 +21,9 @@ const BoardDetail = () => {
     globalLoading();
   }, [globalState]);
 
+  const clickMethod = () => {
+    navigator("/method");
+  };
   return (
     <StyledBoard>
       <div className="firstWrap">
@@ -94,6 +100,11 @@ const BoardDetail = () => {
           </div>
         </div>
       ))}
+      <div className="buttonWrap">
+        <button className="methodButton" onClick={clickMethod}>
+          예방방법 보러가기
+        </button>
+      </div>
     </StyledBoard>
   );
 };
@@ -164,5 +175,20 @@ const StyledBoard = styled.div`
     font-size: 1.1em;
     align-items: center;
     justify-content: right;
+  }
+  .buttonWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .methodButton {
+    width: 80%;
+    height: 5vh;
+    background-color: #1172a1;
+    color: white;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
 `;
