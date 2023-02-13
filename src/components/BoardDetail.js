@@ -1,7 +1,25 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const BoardDetail = () => {
   const chartList = ["확진자 추이 비교", "사망자 추이", "회복자 추이"];
+  const [globalState, setGlobalState] = useState("");
+
+  useEffect(() => {
+    const globalLoading = async () => {
+      try {
+        const { data } = await axios.get("https://api.covid19api.com/summary");
+        console.log(data);
+        setGlobalState(data);
+        // let result = Number(data.Global.TotalConfirmed).toLocaleString();
+        // setGlobalState(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    globalLoading();
+  });
 
   return (
     <StyledBoard>
@@ -11,10 +29,15 @@ const BoardDetail = () => {
             <span>전세계 확진자 수</span>
           </div>
           <div className="peopleCount">
-            <span>1000명</span>
+            <span>
+              {Number(globalState.Global.TotalConfirmed).toLocaleString()}명
+            </span>
           </div>
           <div className="difference">
-            <span>1000</span>
+            <span>
+              신규확진자 수&nbsp;
+              {Number(globalState.Global.NewConfirmed).toLocaleString()}
+            </span>
           </div>
         </div>
       </div>
@@ -22,26 +45,36 @@ const BoardDetail = () => {
         <div className="leftWrap margin_5">
           <div className="totalStates">
             <div className="statesTitle">
-              <span>전세계 확진자 수</span>
+              <span>전세계 사망자수</span>
             </div>
             <div className="peopleCount">
-              <span>1000명</span>
+              <span>
+                {Number(globalState.Global.TotalDeaths).toLocaleString()}명
+              </span>
             </div>
             <div className="difference">
-              <span>1000</span>
+              <span>
+                신규사망자 수&nbsp;
+                {Number(globalState.Global.NewDeaths).toLocaleString()}
+              </span>
             </div>
           </div>
         </div>
         <div className="rightWrap">
           <div className="totalStates">
             <div className="statesTitle">
-              <span>전세계 확진자 수</span>
+              <span>전세계 회복자 수</span>
             </div>
             <div className="peopleCount">
-              <span>1000명</span>
+              <span>
+                {Number(globalState.Global.TotalRecovered).toLocaleString()}명
+              </span>
             </div>
             <div className="difference">
-              <span>1000</span>
+              <span>
+                신규 회복자수&nbsp;
+                {Number(globalState.Global.NewRecovered).toLocaleString()}
+              </span>
             </div>
           </div>
         </div>
@@ -122,7 +155,7 @@ const StyledBoard = styled.div`
   .difference {
     display: flex;
     height: 20%;
-    font-size: 1.3em;
+    font-size: 1.1em;
     align-items: center;
     justify-content: right;
   }

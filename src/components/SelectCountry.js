@@ -37,27 +37,41 @@ const SelectCountry = ({ modal, setModal }) => {
   useEffect(() => {
     clearTimeout(debounce.current);
 
-    const countryLoading = async () => {
-      setLoading(true);
-      try {
-        const { data } = await axios.get(
-          "https://api.covid19api.com/countries"
-        );
-        const fillterData = data.filter((country) =>
-          country.Country.includes(search)
-        );
-        setCountryList(fillterData);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    debounce.current = setTimeout(countryLoading, 500);
+    // const countryLoading = async () => {
+    //   setLoading(true);
+    //   try {
+    //     const { data } = await axios.get("https://api.covid19api.com/summary");
+    //     console.log(data.Global);
+    //     const fillterData = data.filter((country) =>
+    //       country.Countries.Country.includes(search)
+    //     );
+    //     setCountryList(fillterData);
+    //     setLoading(false);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+    // const countryLoading = () => {
+    //   axios.get("https://api.covid19api.com/summary").then((result) => {
+    //     console.log(result.Countries);
+    //   });
+    // };
+    // debounce.current = setTimeout(countryLoading, 500);
   }, [search]);
 
   const clickCountry = (e) => {
     setSelectedCountry(e.target.value);
     console.log(selectedCountry);
+  };
+
+  const clickGlobal = async () => {
+    try {
+      const { data } = await axios.get("https://api.covid19api.com/summary");
+      console.log(data.Global);
+      setModal(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -67,7 +81,7 @@ const SelectCountry = ({ modal, setModal }) => {
           <GoX onClick={exitModal} />
         </div>
         <div>
-          <span>지역 선택하기</span>
+          <span onClick={clickGlobal}>지역 선택하기</span>
         </div>
         <div>
           <span>전세계 현황 조회하기</span>
@@ -95,15 +109,20 @@ const SelectCountry = ({ modal, setModal }) => {
                   if (value === "") {
                     return val;
                   }
-                  if (val.Country.toUpperCase().includes(value.toUpperCase())) {
+                  if (
+                    val.Countries.Country.toUpperCase().includes(
+                      value.toUpperCase()
+                    )
+                  ) {
                     return val;
                   }
                 })
                 .map((contries) => (
-                  <ul key={contries.Country} className="countriesList">
-                    <li id={contries.Country} onClick={clickCountry}>
-                      {contries.Country}
-                    </li>
+                  <ul
+                    key={contries.Countries.Country}
+                    className="countriesList"
+                  >
+                    <li onClick={clickCountry}>{contries.Countries.Country}</li>
                   </ul>
                 ))}
           </div>
