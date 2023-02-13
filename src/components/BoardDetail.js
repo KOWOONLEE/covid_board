@@ -10,16 +10,13 @@ const BoardDetail = () => {
     const globalLoading = async () => {
       try {
         const { data } = await axios.get("https://api.covid19api.com/summary");
-        console.log(data);
         setGlobalState(data);
-        // let result = Number(data.Global.TotalConfirmed).toLocaleString();
-        // setGlobalState(result);
       } catch (error) {
         console.log(error);
       }
     };
     globalLoading();
-  });
+  }, [globalState]);
 
   return (
     <StyledBoard>
@@ -30,13 +27,16 @@ const BoardDetail = () => {
           </div>
           <div className="peopleCount">
             <span>
-              {Number(globalState.Global.TotalConfirmed).toLocaleString()}명
+              {globalState &&
+                Number(globalState.Global.TotalConfirmed).toLocaleString()}
+              명
             </span>
           </div>
           <div className="difference">
             <span>
               신규확진자 수&nbsp;
-              {Number(globalState.Global.NewConfirmed).toLocaleString()}
+              {globalState &&
+                Number(globalState.Global.NewConfirmed).toLocaleString()}
             </span>
           </div>
         </div>
@@ -49,13 +49,16 @@ const BoardDetail = () => {
             </div>
             <div className="peopleCount">
               <span>
-                {Number(globalState.Global.TotalDeaths).toLocaleString()}명
+                {globalState &&
+                  Number(globalState.Global.TotalDeaths).toLocaleString()}
+                명
               </span>
             </div>
             <div className="difference">
               <span>
                 신규사망자 수&nbsp;
-                {Number(globalState.Global.NewDeaths).toLocaleString()}
+                {globalState &&
+                  Number(globalState.Global.NewDeaths).toLocaleString()}
               </span>
             </div>
           </div>
@@ -67,13 +70,16 @@ const BoardDetail = () => {
             </div>
             <div className="peopleCount">
               <span>
-                {Number(globalState.Global.TotalRecovered).toLocaleString()}명
+                {globalState &&
+                  Number(globalState.Global.TotalRecovered).toLocaleString()}
+                명
               </span>
             </div>
             <div className="difference">
               <span>
                 신규 회복자수&nbsp;
-                {Number(globalState.Global.NewRecovered).toLocaleString()}
+                {globalState &&
+                  Number(globalState.Global.NewRecovered).toLocaleString()}
               </span>
             </div>
           </div>

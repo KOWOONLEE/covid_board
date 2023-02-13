@@ -80,7 +80,7 @@ const SelectCountry = ({ modal, setModal }) => {
         <div className="exitbuttonWrap">
           <GoX onClick={exitModal} />
         </div>
-        <div>
+        <div className="modalTitle">
           <span onClick={clickGlobal}>지역 선택하기</span>
         </div>
         <div>
@@ -164,6 +164,19 @@ const StyledModal = styled.div`
       background-color: grey;
       border: 2px solid black;
       fill: white;
+    }
+    .modalTitle {
+      display: flex;
+      width: 100%;
+      height: 10vh;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        width: 100%;
+        display: flex;
+        text-align: center;
+      }
     }
     .countriesForm {
       width: 100%;
