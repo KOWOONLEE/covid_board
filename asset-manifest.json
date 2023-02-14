@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/covid_board/static/js/main.c61c269b.js",
+    "index.html": "/covid_board/index.html",
+    "main.c61c269b.js.map": "/covid_board/static/js/main.c61c269b.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.c61c269b.js"
+  ]
+}
