@@ -75,13 +75,12 @@ const SelectCountry = ({ modal, setModal }) => {
           <GoX onClick={exitModal} />
         </div>
         <div className="modalTitle">
-          <span onClick={clickGlobal}>지역 선택하기</span>
+          <div className="title" onClick={clickGlobal}>
+            지역 선택하기
+          </div>
         </div>
         <div>
-          <span>전세계 현황 조회하기</span>
-        </div>
-        <div>
-          <div>
+          <div className="selectTitle">
             <span>선택 국가 현황 조회하기</span>
           </div>
           <div>
@@ -93,24 +92,27 @@ const SelectCountry = ({ modal, setModal }) => {
                 ref={inputRef}
                 onChange={(e) => setSearch(e.target.value)}
               ></input>
-              <button onClick={handleSubmit}>조회</button>
+              <button className="submitBtn" onClick={handleSubmit}>
+                조회
+              </button>
             </form>
           </div>
           <div>
-            {countryList.Countries
-              // .filter((val) => {
-              //   if (value === "") {
-              //     return val;
-              //   }
-              //   if (val.Countries.toUpperCase().includes(value.toUpperCase())) {
-              //     return val;
-              //   }
-              // })
-              .map((contries) => (
-                <ul key={contries.Countries} className="countriesList">
-                  <li onClick={clickCountry}>{contries.Countries}</li>
-                </ul>
-              ))}
+            {countryList &&
+              countryList.Countries
+                // .filter((val) => {
+                //   if (value === "") {
+                //     return val;
+                //   }
+                //   if (val.Countries.toUpperCase().includes(value.toUpperCase())) {
+                //     return val;
+                //   }
+                // })
+                .map((contries) => (
+                  <ul key={contries.Countries} className="countriesList">
+                    <li onClick={clickCountry}>{contries.Countries}</li>
+                  </ul>
+                ))}
           </div>
         </div>
       </div>
@@ -151,30 +153,48 @@ const StyledModal = styled.div`
       border: 2px solid black;
       fill: white;
     }
-    .modalTitle {
-      display: flex;
-      width: 100%;
-      height: 10vh;
-      align-items: center;
-      justify-content: center;
-
-      span {
-        width: 100%;
-        display: flex;
-        text-align: center;
-      }
-    }
-    .countriesForm {
-      width: 100%;
-    }
-    .countriesInput {
-      width: 80%;
-    }
-    .countriesList {
-      list-style: none;
-    }
-    .countriesList li::before {
-      content: "👉";
-    }
+  }
+  .modalTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .title {
+    width: 100%;
+    text-align: center;
+    font-size: 1.1em;
+  }
+  .selectTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0 10px 0;
+    font-size: 0.8em;
+  }
+  .countriesForm {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .countriesInput {
+    width: 80%;
+    height: 5vh;
+    text-align: center;
+  }
+  .submitBtn {
+    height: 5vh;
+    border: 1px solid grey;
+    background-color: #d2f0f4;
+  }
+  .countriesList {
+    list-style: none;
+    margin-left: 20px;
+    margin-bottom: 5px;
+  }
+  .countriesList li::before {
+    content: "👉";
   }
 `;
