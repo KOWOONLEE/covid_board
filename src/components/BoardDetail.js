@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import Mainchart from "./Mainchart";
 
 const BoardDetail = () => {
-  const chartList = ["확진자 추이 비교", "사망자 추이", "회복자 추이"];
   const [globalState, setGlobalState] = useState("");
   const navigator = useNavigate();
 
@@ -13,7 +12,6 @@ const BoardDetail = () => {
     const globalLoading = async () => {
       try {
         const { data } = await axios.get("https://api.covid19api.com/summary");
-        console.log(data);
         setGlobalState(data);
       } catch (error) {
         console.log(error);

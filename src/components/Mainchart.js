@@ -25,8 +25,6 @@ ChartJS.register(
 );
 
 const Mainchart = () => {
-  const chartList = ["확진자 추이 비교", "사망자 추이", "회복자 추이"];
-
   const [globalContents, setGlobalContents] = useState("");
   const [koreaContents, setKoreaContents] = useState("");
 
@@ -43,14 +41,12 @@ const Mainchart = () => {
             globalContents.length - 1
           )
         );
-        console.log(koreaContents);
-        console.log(Data);
       } catch (error) {
         console.log(error);
       }
     };
     chartLoading();
-  }, []);
+  }, [koreaContents]);
 
   const options = {
     responsive: true,
@@ -66,22 +62,17 @@ const Mainchart = () => {
   };
 
   const [koreaCase, setKoreaCase] = useState({
-    labels: koreaContents && koreaContents.map((data) => data.Date),
+    labels:
+      Data &&
+      Data.slice(Data.length - 6, Data.length - 1).map((data) => data.Date),
     datasets: [
       {
         label: "korea",
-        data: koreaContents && koreaContents.map((data) => data.Cases),
-        backgroundColor: ["blue"],
-      },
-      {},
-    ],
-  });
-  const [koreaData, setKoreaData] = useState({
-    labels: koreaContents && koreaContents.map((data) => data.Date),
-    datasets: [
-      {
-        label: "korea",
-        data: koreaContents && koreaContents.map((data) => data.Cases),
+        data:
+          Data &&
+          Data.slice(Data.length - 6, Data.length - 1).map(
+            (data) => data.Cases
+          ),
         backgroundColor: ["blue"],
       },
       {},
@@ -97,20 +88,6 @@ const Mainchart = () => {
           </div> */}
           <div>
             <Line data={koreaCase} options={options} width={50} height={35} />
-          </div>
-        </div>
-      </div>
-      <div className="chartWrap">
-        <div className="totalStates">
-          <div className="statesTitle">
-            <span>사망자 추이</span>
-          </div>
-        </div>
-      </div>
-      <div className="chartWrap">
-        <div className="totalStates">
-          <div className="statesTitle">
-            <span>회복자 추이</span>
           </div>
         </div>
       </div>

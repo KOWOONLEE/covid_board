@@ -11,11 +11,29 @@ const SelectCountry = ({ modal, setModal }) => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [countryList, setCountryList] = useState("");
   const inputRef = useRef("");
-  const clickRef = useRef("");
   const debounce = useRef();
   const exitModal = () => {
     setModal(false);
   };
+  useEffect(() => {
+    clearTimeout(debounce.current);
+
+    const countryLoading = async () => {
+      setLoading(true);
+      try {
+        const { data } = await axios.get(
+          "https://api.covid19api.com/countries"
+        );
+        const fillterData =
+          data && data.filter((country) => country.Country.includes(search));
+        setCountryList(fillterData);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    debounce.current = setTimeout(countryLoading, 100);
+  }, [search]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -24,48 +42,19 @@ const SelectCountry = ({ modal, setModal }) => {
     };
   }, []);
 
-  useEffect(() => {
-    clearTimeout(debounce.current);
-
-    const countryLoading = async () => {
-      try {
-        const { data } = await axios.get("https://api.covid19api.com/summary");
-        // const fillterData = data.filter((country) =>
-        //   country.Countries.includes(search)
-        // );
-        setCountryList(data);
-        console.log(countryList.Countries);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    debounce.current = setTimeout(countryLoading, 500);
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (inputRef.current) {
-      setValue(inputRef.current.value);
-      console.log(inputRef);
-      inputRef.current.value = "";
-    }
+    // if (inputRef.current) {
+    //   setValue(inputRef.current.value);
+    //   console.log(inputRef);
+    //   inputRef.current.value = "";
+    // }
   };
 
   const clickCountry = (e) => {
     setSelectedCountry(e.target.value);
     console.log(selectedCountry);
-  };
-
-  const clickGlobal = async () => {
-    try {
-      const { data } = await axios.get("https://api.covid19api.com/summary");
-      console.log(data.Countries);
-      setModal(false);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -75,9 +64,7 @@ const SelectCountry = ({ modal, setModal }) => {
           <GoX onClick={exitModal} />
         </div>
         <div className="modalTitle">
-          <div className="title" onClick={clickGlobal}>
-            지역 선택하기
-          </div>
+          <div className="title">지역 선택하기</div>
         </div>
         <div>
           <div className="selectTitle">
@@ -99,18 +86,20 @@ const SelectCountry = ({ modal, setModal }) => {
           </div>
           <div>
             {countryList &&
-              countryList.Countries
-                // .filter((val) => {
-                //   if (value === "") {
-                //     return val;
-                //   }
-                //   if (val.Countries.toUpperCase().includes(value.toUpperCase())) {
-                //     return val;
-                //   }
-                // })
+              countryList
+                .filter((val) => {
+                  if (value === "") {
+                    return val;
+                  }
+                  if (
+                    val.Countries.toUpperCase().includes(value.toUpperCase())
+                  ) {
+                    return val;
+                  }
+                })
                 .map((contries) => (
-                  <ul key={contries.Countries} className="countriesList">
-                    <li onClick={clickCountry}>{contries.Countries}</li>
+                  <ul key={contries.Country} className="countriesList">
+                    <li onClick={clickCountry}>{contries.Country}</li>
                   </ul>
                 ))}
           </div>
@@ -193,8 +182,9 @@ const StyledModal = styled.div`
     list-style: none;
     margin-left: 20px;
     margin-bottom: 5px;
+    font-size: 0.8em;
   }
   .countriesList li::before {
-    content: "👉";
+    content: "👉 ";
   }
 `;
