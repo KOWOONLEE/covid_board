@@ -1,32 +1,10 @@
 import styled from "styled-components";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useRef, useState } from "react";
+import { useState } from "react";
+import Question from "../components/Question";
 
 const Method = () => {
-  const [click, setClick] = useState(false);
-
-  const navigate = useNavigate();
-  const titleRef = useRef(null);
-  const contentRef = useRef(null);
-
-  const handleClick = useCallback(
-    (e) => {
-      e.stopPropagation();
-      if (titleRef.current === null || contentRef.current === null) {
-        return;
-      }
-      if (titleRef.current.clientHeight > 0) {
-        titleRef.current.style.height = "0";
-      } else {
-        titleRef.current.style.height = `${contentRef.current.clientHeight}px`;
-      }
-      setClick(!click);
-    },
-    [click]
-  );
-
   const methodList = [
     {
       id: 1,
@@ -49,17 +27,9 @@ const Method = () => {
       content: "질병관리처 1339 내용 ......",
     },
   ];
+  const [click, setClick] = useState(methodList);
 
-  const openContets = (e) => {
-    console.log(e.target.parentElement.offsetHeight, click);
-    if (click) {
-      setClick(false);
-      e.target.parentElement.style.height = "50px";
-    } else if (!click) {
-      setClick(true);
-      e.target.parentElement.style.height = "200px";
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <StyledMethod>
@@ -75,58 +45,9 @@ const Method = () => {
         <div className="navTitle">예방방법</div>
       </div>
       <div className="methodWrap">
-        {methodList.map((title) => (
-          <ul className="methodList">
-            <li onClick={handleClick}>
-              <div>{title.title}</div>
-              <div>
-                <IoIosArrowDown />
-              </div>
-            </li>
-            <div className="contentWrap" ref={titleRef}>
-              <div className="contentDetail" ref={contentRef}>
-                {title.content}
-              </div>
-            </div>
-
-            {/* <li>
-            <div>손씻는 법</div>
-            <div>
-              <IoIosArrowDown />
-            </div>
-          </li>
-          <div className="contentBox">
-            <div>손씻는 법 내용 ......</div>
-          </div>
-          <li>
-            <div>밀접접촉자 행동요령</div>
-            <div>
-              <IoIosArrowDown />
-            </div>
-          </li>
-          <div className="contentBox">
-            <div>밀접접촉자 내용 ......</div>
-          </div>
-          <li>
-            <div>관련기관 연락처</div>
-            <div>
-              <IoIosArrowDown />
-            </div>
-          </li>
-          <div className="contentBox">
-            <div>관련기관 내용 ......</div>
-          </div>
-          <li>
-            <div>질병관리처 1339</div>
-            <div>
-              <IoIosArrowDown />
-            </div>
-          </li>
-          <div className="contentBox">
-            <div>질병관리처 1339 내용 ......</div>
-          </div> */}
-          </ul>
-        ))}
+        {click.map((method) => {
+          return <Question key={method.id} {...method} />;
+        })}
       </div>
     </StyledMethod>
   );
@@ -165,38 +86,5 @@ const StyledMethod = styled.div`
     width: 100%;
     /* top: 20vh; */
     align-items: center;
-  }
-  .methodList {
-    display: inline-block;
-    width: 100%;
-    height: 7vh;
-    align-items: center;
-
-    li {
-      display: flex;
-      font-weight: 600;
-      padding: 15px 20px;
-      border: 1px solid grey;
-    }
-    svg {
-      position: absolute;
-      right: 8vw;
-      width: 20px;
-      height: 20px;
-    }
-  }
-  .contentBox {
-    display: flex;
-    width: 100%;
-    height: 15vh;
-    color: grey;
-    border: 1px solid grey;
-    padding: 20px;
-
-    div {
-    }
-  }
-  .contentBoxNone {
-    display: none;
   }
 `;
