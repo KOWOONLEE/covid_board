@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Mainchart from "./Mainchart";
 
 const BoardDetail = () => {
   const chartList = ["확진자 추이 비교", "사망자 추이", "회복자 추이"];
@@ -91,7 +92,8 @@ const BoardDetail = () => {
           </div>
         </div>
       </div>
-      {chartList.map((list) => (
+      <Mainchart />
+      {/* {chartList.map((list) => (
         <div key={list} className="chartWrap">
           <div className="totalStates">
             <div className="statesTitle">
@@ -99,7 +101,7 @@ const BoardDetail = () => {
             </div>
           </div>
         </div>
-      ))}
+      ))} */}
       <div className="buttonWrap">
         <button className="methodButton" onClick={clickMethod}>
           예방방법 보러가기
